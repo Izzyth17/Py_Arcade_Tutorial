@@ -92,7 +92,9 @@ class MyGame(arcade.Window):
             screen_center_x = 0
         if screen_center_y < 0:
             screen_center_y = 0
-        player_centered = (screen_center_x, screen_center_y)
+        player_centered = screen_center_x, screen_center_y
+
+        self.camera.move(player_centered)
 
     def on_update(self, delta_time):
         self.physics_engine.update()
