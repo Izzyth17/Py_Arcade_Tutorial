@@ -7,6 +7,7 @@ SCREEN_TITLE = "Platformer"
 CHARACTER_SCALING = 1
 TILE_SCALING = 0.5
 
+PLAYER_MOVEMENT_SPEED = 5
 
 class MyGame(arcade.Window):
 
@@ -16,6 +17,8 @@ class MyGame(arcade.Window):
         self.scene = None
 
         self.player_sprite = None
+
+        self.physics_engine = None
 
         arcade.set_background_color(arcade.csscolor.CADET_BLUE)
 
@@ -44,7 +47,34 @@ class MyGame(arcade.Window):
                 wall.position = coordinate
                 self.scene.add_sprite("Walls", wall)
 
+            self.physics_engine = arcade.PhysicsEngineSimple(self.player_sprite, self.scene.get_sprite_list("Walls"))
+
     def on_draw(self):
         self.clear()
 
         self.scene.draw()
+
+    def on_key_press(self, key, modifiers):
+
+        if key == arcade.key.UP or key == arcade.key.W:
+            self.player_sprite.change_y = PLAYER_MOVEMENT_SPEED
+        if key == arcade.key.DOWN or key == arcade.key.S:
+            self.player_sprite.change_y = -PLAYER_MOVEMENT_SPEED
+        if key == arcade.key.LEFT or key == arcade.key.A:
+            self.player_sprite.change_x = -PLAYER_MOVEMENT_SPEED
+        if key == arcade.key.RIGHT or key == arcade.key.D:
+            self.player_sprite.change_x = PLAYER_MOVEMENT_SPEED
+
+    def on_key_release(self, key, modifiers):
+
+        if key == arcade.key.UP or key == arcade.key.W:
+            self.player_sprite.change_y = 0
+        if key == arcade.key.DOWN or key == arcade.key.S:
+            self.player_sprite.change_y = 0
+        if key == arcade.key.LEFT or key == arcade.key.A:
+            self.player_sprite.change_x = 0
+        if key == arcade.key.RIGHT or key == arcade.key.D:
+            self.player_sprite.change_x = 0
+
+    def on_update(self, delta_time):
+        self.physics_engine.update()
