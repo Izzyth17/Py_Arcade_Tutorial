@@ -26,6 +26,10 @@ class MyGame(arcade.Window):
 
         self.camera = None
 
+        self.gui_camera = None
+
+        self.score = 0
+
         self.collect_coin_sound = arcade.load_sound(":resources:sounds/coin1.wav")
         self.jump_sound = arcade.load_sound(":resources:sounds/jump1.wav")
 
@@ -34,6 +38,10 @@ class MyGame(arcade.Window):
     def setup(self):
 
         self.camera = arcade.Camera(self.width, self.height)
+
+        self.gui_camera = arcade.Camera(self.width, self.height)
+
+        self.score = 0
 
         self.scene = arcade.Scene()
 
@@ -77,6 +85,17 @@ class MyGame(arcade.Window):
 
         self.scene.draw()
 
+        self.gui_camera.use()
+
+        score_text = f"Score: {self.score}"
+        arcade.draw_text(
+            score_text,
+            10,
+            10,
+            arcade.csscolor.GOLD,
+            18
+        )
+
     def on_key_press(self, key, modifiers):
 
         if key == arcade.key.UP or key == arcade.key.W:
@@ -117,5 +136,6 @@ class MyGame(arcade.Window):
         for coin in coin_hit_list:
             coin.remove_from_sprite_lists()
             arcade.play_sound(self.collect_coin_sound)
+            self.score += 1
 
         self.center_camera_to_player()
